@@ -18,7 +18,7 @@ namespace FHTW.SWEN1.Swamp
         {
             string[] lines = tcp.Replace("\r\n", "\n").Replace("\r", "\n").Split("\n");
             bool inheaders = true;
-            List<string> headers = new List<string>();
+            List<HttpHeader> headers = new List<HttpHeader>();
 
             for(int i = 0; i < lines.Length; i++)
             {
@@ -34,7 +34,7 @@ namespace FHTW.SWEN1.Swamp
                     {
                         inheaders = false;
                     }
-                    else { headers.Add(lines[i]); }
+                    else { headers.Add(new HttpHeader(lines[i])); }
                 }
                 else
                 {
@@ -65,7 +65,8 @@ namespace FHTW.SWEN1.Swamp
         }
 
 
-        public string[] Headers
+        /// <summary>Gets the HTTP headers.</summary>
+        public HttpHeader[] Headers
         {
             get; private set;
         }

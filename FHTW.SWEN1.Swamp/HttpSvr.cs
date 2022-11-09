@@ -54,30 +54,15 @@ namespace FHTW.SWEN1.Swamp
                 TcpClient client = _Listener.AcceptTcpClient();                 // wait for a client to connect
 
                 NetworkStream stream = client.GetStream();                      // get the client stream
-
+                
                 data = "";
-                while(stream.DataAvailable)
+                while(stream.DataAvailable || (data == ""))
                 {                                                               // read and decode stream
                     n = stream.Read(buf, 0, buf.Length);
                     data += Encoding.ASCII.GetString(buf, 0, n);
                 }
 
-                Console.WriteLine(data);                                        // write decoded data to console
-                Console.WriteLine();
-
-
-                /* stuff we are going to do sometimes...
-                */
-                data = "HTTP/1.1 418 I'm a Teapot\n" + 
-                       "Content-Type: text/plain\n\n" +
-                       "0";
-                byte[] dbuf = Encoding.ASCII.GetBytes(data);
-                stream.Write(dbuf, 0, dbuf.Length);                             // send a response
-                
-                client.Close();                                                 // shut down the connection
-                client.Dispose();
-                //*/
-
+                Incoming?.Invoke(this, new HttpSvrEventArgs(data, client));
             }
         }
     }

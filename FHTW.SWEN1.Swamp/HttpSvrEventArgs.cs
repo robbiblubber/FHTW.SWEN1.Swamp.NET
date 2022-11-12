@@ -109,6 +109,9 @@ namespace FHTW.SWEN1.Swamp
                 case 400:
                     data = "HTTP/1.1 400 Bad Request\n";
                     break;
+                case 404:
+                    data = "HTTP/1.1 404 Not Found\n";
+                    break;
                 default:
                     data = "HTTP/1.1 418 I'm a Teapot\n";
                     break;

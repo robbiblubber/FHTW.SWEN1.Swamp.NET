@@ -28,6 +28,7 @@ namespace FHTW.SWEN1.Swamp
         public HttpSvrEventArgs(string tcp, TcpClient client)
         {
             _Client = client;
+            PlainMessage = tcp;
 
             string[] lines = tcp.Replace("\r\n", "\n").Replace("\r", "\n").Split("\n");
             bool inheaders = true;
@@ -63,6 +64,13 @@ namespace FHTW.SWEN1.Swamp
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // public properties                                                                                        //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>Gets the plain message as received from TCP.</summary>
+        public string PlainMessage
+        {
+            get; private set;
+        }
+
 
         /// <summary>Get the HTTP method.</summary>
         public string Method

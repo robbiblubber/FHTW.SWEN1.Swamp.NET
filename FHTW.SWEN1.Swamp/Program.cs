@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SQLite;
 using System.Text;
+using System.Threading;
 
 namespace FHTW.SWEN1.Swamp
 {
@@ -81,6 +82,20 @@ namespace FHTW.SWEN1.Swamp
         /// <param name="e">Event arguments.</param>
         private static void _Svr_Incoming(object sender, HttpSvrEventArgs e)
         {
+            ThreadPool.QueueUserWorkItem(_Svr_Incoming, e);
+        }
+
+
+        /// <summary>Processes an incoming HTTP request.</summary>
+        /// <param name="evt">Event arguments.</param>
+        private static void _Svr_Incoming(object evt)
+        {
+            HttpSvrEventArgs e = (HttpSvrEventArgs) evt;
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(e.PlainMessage);
+            Console.ForegroundColor = ConsoleColor.White;
+
             if(e.Path == "/messages")
             {                                                                   // no message id provided
                 if(e.Method == "POST")
@@ -194,6 +209,8 @@ namespace FHTW.SWEN1.Swamp
                 Console.WriteLine("Rejected message.");
                 e.Reply(400);
             }
+
+            Console.WriteLine();
         }
     }
 }

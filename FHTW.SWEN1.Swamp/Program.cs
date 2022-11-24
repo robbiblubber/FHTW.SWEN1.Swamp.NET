@@ -4,6 +4,8 @@ using System.Data.SQLite;
 using System.Text;
 using System.Threading;
 
+
+
 namespace FHTW.SWEN1.Swamp
 {
     /// <summary>This is the program class for the application.</summary>
@@ -26,8 +28,7 @@ namespace FHTW.SWEN1.Swamp
         /// <param name="args">Command line arguments.</param>
         static void Main(string[] args)
         {
-            _Cn = new SQLiteConnection("Data Source=swamp.db;Version=3;");
-            _Cn.Open();
+            InitDb();
 
             HttpSvr svr = new HttpSvr();
             svr.Incoming += _Svr_Incoming;
@@ -38,9 +39,25 @@ namespace FHTW.SWEN1.Swamp
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // public static methods                                                                                    //
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>Initializes the database connection.</summary>
+        public static void InitDb()
+        {
+            _Cn = new SQLiteConnection("Data Source=swamp.db;Version=3;");
+            _Cn.Open();
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // private static methods                                                                                   //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
+        /// <summary>Reads messages from database.</summary>
+        /// <param name="msg">Message number.</param>
+        /// <returns>Message text.</returns>
         private static string _ReadMessages(int msg = -1)
         {
             IDbCommand cmd = _Cn.CreateCommand();
@@ -80,7 +97,7 @@ namespace FHTW.SWEN1.Swamp
         /// <summary>Processes an incoming HTTP request.</summary>
         /// <param name="sender">Object that raised the event.</param>
         /// <param name="e">Event arguments.</param>
-        private static void _Svr_Incoming(object sender, HttpSvrEventArgs e)
+        public static void _Svr_Incoming(object sender, HttpSvrEventArgs e)
         {
             ThreadPool.QueueUserWorkItem(_Svr_Incoming, e);
         }
@@ -88,7 +105,7 @@ namespace FHTW.SWEN1.Swamp
 
         /// <summary>Processes an incoming HTTP request.</summary>
         /// <param name="evt">Event arguments.</param>
-        private static void _Svr_Incoming(object evt)
+        public static void _Svr_Incoming(object evt)
         {
             HttpSvrEventArgs e = (HttpSvrEventArgs) evt;
 

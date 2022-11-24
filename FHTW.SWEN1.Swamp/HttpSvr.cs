@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -21,6 +20,7 @@ namespace FHTW.SWEN1.Swamp
         // private members                                                                                          //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
+        /// <summary>TCP listener instance.</summary>
         private TcpListener _Listener;
 
 
@@ -35,13 +35,23 @@ namespace FHTW.SWEN1.Swamp
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // public properties                                                                                           //
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>Active flag. Determines if the server is still running.</summary>
+        public bool Active { get; set; }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // public methods                                                                                           //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>Runs the server.</summary>
-        /// <remarks>Probably won't stay this way forever.</remarks>
         public void Run()
         {
+            Active = true;
+
             _Listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 12000);
             _Listener.Start();
 
@@ -49,7 +59,7 @@ namespace FHTW.SWEN1.Swamp
             int n;
             string data;
 
-            while(true)
+            while(Active)
             {
                 TcpClient client = _Listener.AcceptTcpClient();                 // wait for a client to connect
 
@@ -64,6 +74,8 @@ namespace FHTW.SWEN1.Swamp
 
                 Incoming?.Invoke(this, new HttpSvrEventArgs(data, client));
             }
+
+            _Listener.Stop();
         }
     }
 }

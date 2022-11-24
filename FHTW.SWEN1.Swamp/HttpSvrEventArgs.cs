@@ -24,6 +24,11 @@ namespace FHTW.SWEN1.Swamp
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>Creates a new instance of this class.</summary>
+        public HttpSvrEventArgs()
+        {}
+
+
+        /// <summary>Creates a new instance of this class.</summary>
         /// <param name="tcp">HTTP message received from TCP listener.</param>
         public HttpSvrEventArgs(string tcp, TcpClient client)
         {
@@ -73,16 +78,16 @@ namespace FHTW.SWEN1.Swamp
 
 
         /// <summary>Get the HTTP method.</summary>
-        public string Method
+        public virtual string Method
         {
-            get; private set;
+            get; protected set;
         }
 
 
         /// <summary>Gets the URL path.</summary>
-        public string Path
+        public virtual string Path
         {
-            get; private set;
+            get; protected set;
         }
 
 
@@ -105,7 +110,10 @@ namespace FHTW.SWEN1.Swamp
         // public methods                                                                                           //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        public void Reply(int status, string payload = null)
+        /// <summary>Returns a reply to the HTTP request.</summary>
+        /// <param name="status">Status code.</param>
+        /// <param name="payload">Payload.</param>
+        public virtual void Reply(int status, string payload = null)
         {
             string data;
 
